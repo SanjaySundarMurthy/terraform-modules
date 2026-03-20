@@ -21,17 +21,10 @@ resource "azurerm_container_registry" "this" {
     content {
       location                = georeplications.value.location
       zone_redundancy_enabled = lookup(georeplications.value, "zone_redundancy", true)
-      tags                    = var.tags
     }
   }
 
-  dynamic "retention_policy" {
-    for_each = var.sku == "Premium" ? [1] : []
-    content {
-      enabled = true
-      days    = var.retention_days
-    }
-  }
+  retention_policy_in_days = var.sku == "Premium" ? var.retention_days : null
 
   network_rule_bypass_option = "AzureServices"
 

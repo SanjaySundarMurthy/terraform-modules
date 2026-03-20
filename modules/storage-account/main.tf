@@ -9,19 +9,19 @@ terraform {
 }
 
 resource "azurerm_storage_account" "this" {
-  name                          = var.storage_account_name
-  resource_group_name           = var.resource_group_name
-  location                      = var.location
-  account_tier                  = var.account_tier
-  account_replication_type      = var.replication_type
-  account_kind                  = "StorageV2"
-  min_tls_version               = "TLS1_2"
+  name                            = var.storage_account_name
+  resource_group_name             = var.resource_group_name
+  location                        = var.location
+  account_tier                    = var.account_tier
+  account_replication_type        = var.replication_type
+  account_kind                    = "StorageV2"
+  min_tls_version                 = "TLS1_2"
   allow_nested_items_to_be_public = false
-  public_network_access_enabled = var.public_network_access
+  public_network_access_enabled   = var.public_network_access
 
   blob_properties {
-    versioning_enabled       = var.enable_versioning
-    change_feed_enabled      = var.enable_change_feed
+    versioning_enabled  = var.enable_versioning
+    change_feed_enabled = var.enable_change_feed
     delete_retention_policy {
       days = var.soft_delete_retention_days
     }
@@ -33,10 +33,9 @@ resource "azurerm_storage_account" "this" {
   dynamic "network_rules" {
     for_each = var.network_default_action == "Deny" ? [1] : []
     content {
-      default_action             = "Deny"
-      bypass                     = ["AzureServices", "Logging", "Metrics"]
-      ip_rules                   = var.allowed_ip_ranges
-      virtual_network_subnet_ids = var.allowed_subnet_ids
+      default_action = "Deny"
+      bypass         = ["AzureServices", "Logging", "Metrics"]
+      ip_rules       = var.allowed_ip_ranges
     }
   }
 

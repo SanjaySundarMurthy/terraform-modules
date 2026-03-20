@@ -67,11 +67,11 @@ variable "containers" {
 variable "lifecycle_rules" {
   description = "Lifecycle management rules"
   type = list(object({
-    name                = string
-    prefix_match        = optional(list(string), [])
-    tier_to_cool_days   = optional(number)
+    name                 = string
+    prefix_match         = optional(list(string), [])
+    tier_to_cool_days    = optional(number)
     tier_to_archive_days = optional(number)
-    delete_after_days   = optional(number)
+    delete_after_days    = optional(number)
   }))
   default = []
 }
