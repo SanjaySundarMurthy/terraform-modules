@@ -1,0 +1,56 @@
+name: Terraform Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Modules
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        module:
+          - networking
+          - aks-cluster
+          - container-registry
+          - key-vault
+          - storage-account
+          - sql-database
+          - app-gateway
+          - monitoring
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7"
+      - name: Terraform Init
+        run: terraform init -backend=false
+        working-directory: modules/${{ matrix.module }}
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: modules/${{ matrix.module }}
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: modules/${{ matrix.module }}
+
+  docs:
+    name: Check Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check each module has README
+        run: |
+          for dir in modules/*/; do
+            if [ ! -f "${dir}README.md" ] && [ ! -f "${dir}variables.tf" ]; then
+              echo "Missing documentation in ${dir}"
+              exit 1
+            fi
+          done
