@@ -9,15 +9,14 @@ terraform {
 }
 
 resource "azurerm_mssql_server" "this" {
-  name                         = var.server_name
-  resource_group_name          = var.resource_group_name
-  location                     = var.location
-  version                      = "12.0"
-  minimum_tls_version          = "1.2"
+  name                          = var.server_name
+  resource_group_name           = var.resource_group_name
+  location                      = var.location
+  version                       = "12.0"
+  minimum_tls_version           = "1.2"
   public_network_access_enabled = var.public_network_access
-
-  administrator_login                 = var.administrator_login
-  administrator_login_password         = var.administrator_login_password
+  administrator_login           = var.administrator_login
+  administrator_login_password  = var.administrator_login_password
 
   azuread_administrator {
     login_username              = var.ad_admin_login
@@ -33,14 +32,14 @@ resource "azurerm_mssql_server" "this" {
 }
 
 resource "azurerm_mssql_database" "this" {
-  name                        = var.database_name
-  server_id                   = azurerm_mssql_server.this.id
-  collation                   = "SQL_Latin1_General_CP1_CI_AS"
-  max_size_gb                 = var.max_size_gb
-  sku_name                    = var.sku_name
-  zone_redundant              = var.zone_redundant
-  geo_backup_enabled          = true
-  storage_account_type        = var.zone_redundant ? "Zone" : "Geo"
+  name                 = var.database_name
+  server_id            = azurerm_mssql_server.this.id
+  collation            = "SQL_Latin1_General_CP1_CI_AS"
+  max_size_gb          = var.max_size_gb
+  sku_name             = var.sku_name
+  zone_redundant       = var.zone_redundant
+  geo_backup_enabled   = true
+  storage_account_type = var.zone_redundant ? "Zone" : "Geo"
 
   short_term_retention_policy {
     retention_days           = var.short_term_retention_days
@@ -55,10 +54,10 @@ resource "azurerm_mssql_database" "this" {
   }
 
   threat_detection_policy {
-    state                      = "Enabled"
-    email_addresses            = var.security_alert_emails
-    retention_days             = 90
-    disabled_alerts            = []
+    state           = "Enabled"
+    email_addresses = var.security_alert_emails
+    retention_days  = 90
+    disabled_alerts = []
   }
 
   tags = var.tags
