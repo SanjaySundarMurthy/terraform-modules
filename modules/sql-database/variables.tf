@@ -45,6 +45,25 @@ variable "ad_admin_object_id" {
   type        = string
 }
 
+variable "administrator_login" {
+  description = "SQL administrator login name"
+  type        = string
+  default     = null
+}
+
+variable "administrator_login_password" {
+  description = "SQL administrator login password"
+  type        = string
+  default     = null
+  sensitive   = true
+}
+
+variable "azuread_authentication_only" {
+  description = "Set to true to use only Azure AD authentication (no SQL auth)"
+  type        = bool
+  default     = true
+}
+
 variable "allow_azure_services" {
   type    = bool
   default = true

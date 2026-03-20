@@ -16,9 +16,13 @@ resource "azurerm_mssql_server" "this" {
   minimum_tls_version          = "1.2"
   public_network_access_enabled = var.public_network_access
 
+  administrator_login                 = var.administrator_login
+  administrator_login_password         = var.administrator_login_password
+
   azuread_administrator {
-    login_username = var.ad_admin_login
-    object_id      = var.ad_admin_object_id
+    login_username              = var.ad_admin_login
+    object_id                   = var.ad_admin_object_id
+    azuread_authentication_only = var.azuread_authentication_only
   }
 
   identity {
