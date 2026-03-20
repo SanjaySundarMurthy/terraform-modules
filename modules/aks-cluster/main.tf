@@ -17,17 +17,17 @@ resource "azurerm_kubernetes_cluster" "this" {
   kubernetes_version  = var.kubernetes_version
 
   default_node_pool {
-    name                = "system"
-    vm_size             = var.default_node_pool.vm_size
-    node_count          = var.default_node_pool.node_count
-    min_count           = var.default_node_pool.min_count
-    max_count           = var.default_node_pool.max_count
-    enable_auto_scaling = var.default_node_pool.min_count != null
-    vnet_subnet_id      = var.vnet_subnet_id
-    os_disk_size_gb     = var.default_node_pool.os_disk_size_gb
-    os_disk_type        = "Managed"
-    max_pods            = 110
-    zones               = var.availability_zones
+    name                 = "system"
+    vm_size              = var.default_node_pool.vm_size
+    node_count           = var.default_node_pool.node_count
+    min_count            = var.default_node_pool.min_count
+    max_count            = var.default_node_pool.max_count
+    auto_scaling_enabled = var.default_node_pool.min_count != null
+    vnet_subnet_id       = var.vnet_subnet_id
+    os_disk_size_gb      = var.default_node_pool.os_disk_size_gb
+    os_disk_type         = "Managed"
+    max_pods             = 110
+    zones                = var.availability_zones
 
     node_labels = {
       "nodepool" = "system"
@@ -49,7 +49,6 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   azure_active_directory_role_based_access_control {
     azure_rbac_enabled = var.enable_azure_rbac
-    managed            = true
   }
 
   auto_scaler_profile {
@@ -105,7 +104,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "this" {
   node_count            = each.value.node_count
   min_count             = each.value.min_count
   max_count             = each.value.max_count
-  enable_auto_scaling   = each.value.min_count != null
+  auto_scaling_enabled  = each.value.min_count != null
   vnet_subnet_id        = var.vnet_subnet_id
   os_disk_size_gb       = each.value.os_disk_size_gb
   os_type               = lookup(each.value, "os_type", "Linux")

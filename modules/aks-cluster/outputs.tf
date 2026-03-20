@@ -22,8 +22,8 @@ output "kube_config_raw" {
 output "kubelet_identity" {
   description = "Kubelet managed identity"
   value = {
-    client_id   = azurerm_kubernetes_cluster.this.kubelet_identity[0].client_id
-    object_id   = azurerm_kubernetes_cluster.this.kubelet_identity[0].object_id
+    client_id = azurerm_kubernetes_cluster.this.kubelet_identity[0].client_id
+    object_id = azurerm_kubernetes_cluster.this.kubelet_identity[0].object_id
   }
 }
 
